@@ -31,8 +31,8 @@ class ChartComponent {
   }
 
   drawAxis() {
-    this.context.strokeStyle = this.config.mainColor;
-    this.context.lineWidth = this.config.lineWidth;
+    this.context.strokeStyle = this.config.axis.color;
+    this.context.lineWidth = this.config.axis.lineWidth;
     
     this.drawLine(this.zero, {
       x: this.zero.x,
@@ -48,7 +48,7 @@ class ChartComponent {
     const amount = this.config.mesh.verticalLines;
     const spaceWidth = this.worldWidth / amount;
     for (let i = 0; i < this.config.mesh.verticalLines; i++) {
-      const x = this.zero.x + spaceWidth * i;
+      const x = this.zero.x + (spaceWidth / 2) + (spaceWidth * i);
       this.drawLine({
         x,
         y: this.zero.y
@@ -63,7 +63,7 @@ class ChartComponent {
     const amount = this.config.mesh.horizontalLines;
     const spaceHeight = this.worldHeight / amount;
     for (let i = 0; i < this.config.mesh.horizontalLines; i++) {
-      const y = this.zero.y - spaceHeight * i;
+      const y = this.zero.y - (spaceHeight / 2) - (spaceHeight * i);
       this.drawLine({
         x: this.zero.x,
         y
@@ -75,6 +75,9 @@ class ChartComponent {
   }
 
   drawMesh() {
+    this.context.strokeStyle = this.config.mesh.color;
+    this.context.lineWidth = this.config.mesh.lineWidth;
+
     this.drawVerticalLines();
     this.drawHorizontalLines();
   }
