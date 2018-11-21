@@ -31,31 +31,30 @@ class ChartComponent {
     this.context.closePath();
   }
 
-  drawTop(point) {
+  drawTop(point, color) {
     this.context.arc(point.x, point.y, this.config.mesh.lineWidth * 3, 0, 2 * Math.PI, false);
-    this.context.fillStyle = this.config.axis.color;
+    this.context.fillStyle = color;
     this.context.fill();
     this.context.closePath();
   }
 
   drawAxis() {
-    this.context.strokeStyle = this.config.axis.color;
-    this.context.lineWidth = this.config.axis.lineWidth;
-    
+    this.changeStrokeColor(this.config.axis.color);
+    this.changeLineWidth(this.config.axis.lineWidth);
     this.drawLine(this.zero, {
       x: this.zero.x,
       y: 0
     });
     this.drawLine(this.zero, {
-      x: this.windowWidth,
+      x: this.windowWidth - this.config.axis.rightSpace,
       y: this.zero.y
     });
   }
 
   drawVerticalLines() {
-    const amount = this.config.mesh.verticalLines;
+    const amount = this.config.maxValues;
     this.spaceWidth = this.worldWidth / amount;
-    for (let i = 0; i < this.config.mesh.verticalLines; i++) {
+    for (let i = 0; i < this.config.maxValues; i++) {
       const x = this.zero.x + (this.spaceWidth * i);
       this.drawLine({
         x,
@@ -68,43 +67,42 @@ class ChartComponent {
   }
 
   drawHorizontalLines() {
-    const amount = this.config.mesh.horizontalLines;
+    const amount = this.config.maxLevels;
     this.spaceHeight = this.worldHeight / amount;
-    for (let i = 0; i < this.config.mesh.horizontalLines; i++) {
+    for (let i = 0; i < this.config.maxLevels; i++) {
       const y = this.zero.y - (this.spaceHeight / 2) - (this.spaceHeight * i);
       this.drawLine({
         x: this.zero.x,
         y
       }, {
-        x: this.windowWidth - this.spaceWidth / 2,
+        x: this.windowWidth - this.config.axis.rightSpace,
         y
       });
     }
   }
 
   drawMesh() {
-    this.context.strokeStyle = this.config.mesh.color;
-    this.context.lineWidth = this.config.mesh.lineWidth;
-
+    this.changeStrokeColor(this.config.mesh.color);
+    this.changeLineWidth(this.config.mesh.lineWidth);
     this.drawVerticalLines();
     this.drawHorizontalLines();
   }
 
   drawBottomLabels(labels) {
-    const amount = this.config.mesh.verticalLines;
+    const amount = this.config.maxValues;
     const spaceWidth = this.worldWidth / amount;
     for (let i = 0; i < labels.length; i++) {
       const x = this.zero.x + (spaceWidth * i) - 25;
-      this.context.fillText(labels[i], x, this.zero.y + 15);
+      this.context.fillText(labels[i], x, this.zero.y + this.config.labels.bottomOffset);
     }
   }
 
   drawLeftLabels(labels) {
-    const amount = this.config.mesh.horizontalLines;
+    const amount = this.config.maxLevels;
     const spaceHeight = this.worldHeight / amount;
     for (let i = 0; i < labels.length; i++) {
       const y = this.zero.y - (spaceHeight / 2) - (spaceHeight * i);
-      this.context.fillText(labels[i], this.zero.x - 45, y);
+      this.context.fillText(labels[i], this.zero.x - this.config.labels.leftOffset, y);
     }
   }
 

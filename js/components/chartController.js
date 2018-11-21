@@ -5,13 +5,15 @@ class ChartController {
     this.data = data;
     this.maxRate = this.maxRate();
     this.minRate = this.minRate();
-    this.drawChart();
+    this.range = this.maxRate - this.minRate;
+    this.chart.drawLabels(this.calculateRateLevels(), this.shownDays());
+    this.render();
   }
 
   calculateRateLevels() {
     return Array.from({
       length: this.config.maxLevels
-    }, (value, index) => (this.minRate + index * (this.maxRate - this.minRate) / (this.config.maxLevels - 1)).toFixed(4));
+    }, (value, index) => (this.minRate + index * this.range / (this.config.maxLevels - 1)).toFixed(4));
   }
 
   shownDays() {
@@ -31,16 +33,21 @@ class ChartController {
   }
 
   calculatePointY(rate) {
-    return this.toWindowY(((rate - this.minRate) * (this.chart.worldHeight - this.chart.spaceHeight)) / (this.maxRate - this.minRate));
+    return this.toWindowY(((rate - this.minRate) * (this.chart.worldHeight - this.chart.spaceHeight)) / this.range);
   }
 
   calculatePointX(i) {
     return this.chart.zero.x + (this.chart.spaceWidth * i);
   }
 
-  drawChart() {
-    this.chart.drawLabels(this.calculateRateLevels(), this.shownDays());
+  drawChartLine(start, end) {
+    const currentColor = end.y < start.y ? this.config.line.positiveColor : this.config.line.negativeColor
+    this.chart.changeStrokeColor(currentColor);
+    this.chart.drawTop(end, currentColor);
+    this.chart.drawLine(start, end);
+  }
 
+  render() {
     let currentPoint = {
       x: this.calculatePointX(0),
       y: this.calculatePointY(this.data[0].rate)
@@ -50,8 +57,7 @@ class ChartController {
         x: this.calculatePointX(i),
         y: this.calculatePointY(this.data[i].rate)
       };
-      this.chart.drawLine(currentPoint, endPoint);
-      this.chart.drawTop(endPoint);
+      this.drawChartLine(currentPoint, endPoint);
       currentPoint = endPoint;
     }
   }
