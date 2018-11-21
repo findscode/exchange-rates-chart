@@ -1,7 +1,7 @@
 class ExchangeApiClient {
   constructor() {
     this.url = {
-      address: "http://www.nbrb.by/API/ExRates/Rates/Dynamics/",
+      address: "https://www.nbrb.by/API/ExRates/Rates/Dynamics/",
       currency: 145
     };
   }
