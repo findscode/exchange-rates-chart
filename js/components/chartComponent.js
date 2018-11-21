@@ -32,7 +32,7 @@ class ChartComponent {
   }
 
   drawTop(point) {
-    this.context.arc(point.x, point.y, this.config.mesh.lineWidth * 2, 0, 2 * Math.PI, false);
+    this.context.arc(point.x, point.y, this.config.mesh.lineWidth * 3, 0, 2 * Math.PI, false);
     this.context.fillStyle = this.config.axis.color;
     this.context.fill();
     this.context.closePath();
@@ -54,9 +54,9 @@ class ChartComponent {
 
   drawVerticalLines() {
     const amount = this.config.mesh.verticalLines;
-    const spaceWidth = this.worldWidth / amount;
+    this.spaceWidth = this.worldWidth / amount;
     for (let i = 0; i < this.config.mesh.verticalLines; i++) {
-      const x = this.zero.x + (spaceWidth / 2) + (spaceWidth * i);
+      const x = this.zero.x + (this.spaceWidth * i);
       this.drawLine({
         x,
         y: this.zero.y
@@ -69,14 +69,14 @@ class ChartComponent {
 
   drawHorizontalLines() {
     const amount = this.config.mesh.horizontalLines;
-    const spaceHeight = this.worldHeight / amount;
+    this.spaceHeight = this.worldHeight / amount;
     for (let i = 0; i < this.config.mesh.horizontalLines; i++) {
-      const y = this.zero.y - (spaceHeight / 2) - (spaceHeight * i);
+      const y = this.zero.y - (this.spaceHeight / 2) - (this.spaceHeight * i);
       this.drawLine({
         x: this.zero.x,
         y
       }, {
-        x: this.windowWidth,
+        x: this.windowWidth - this.spaceWidth / 2,
         y
       });
     }
@@ -94,7 +94,7 @@ class ChartComponent {
     const amount = this.config.mesh.verticalLines;
     const spaceWidth = this.worldWidth / amount;
     for (let i = 0; i < labels.length; i++) {
-      const x = this.zero.x + (spaceWidth * i) + 5;
+      const x = this.zero.x + (spaceWidth * i) - 25;
       this.context.fillText(labels[i], x, this.zero.y + 15);
     }
   }
@@ -113,6 +113,14 @@ class ChartComponent {
     this.context.font = this.config.labels.font;
     this.drawLeftLabels(left);
     this.drawBottomLabels(bottom);
+  }
+
+  changeStrokeColor(color) {
+    this.context.strokeStyle = color;
+  }
+
+  changeLineWidth(width) {
+    this.context.lineWidth = width;
   }
 
   initialize() {
