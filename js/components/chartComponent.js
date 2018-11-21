@@ -28,6 +28,14 @@ class ChartComponent {
     this.context.moveTo(start.x, start.y);
     this.context.lineTo(end.x, end.y);
     this.context.stroke();
+    this.context.closePath();
+  }
+
+  drawTop(point) {
+    this.context.arc(point.x, point.y, this.config.mesh.lineWidth * 2, 0, 2 * Math.PI, false);
+    this.context.fillStyle = this.config.axis.color;
+    this.context.fill();
+    this.context.closePath();
   }
 
   drawAxis() {
@@ -80,6 +88,31 @@ class ChartComponent {
 
     this.drawVerticalLines();
     this.drawHorizontalLines();
+  }
+
+  drawBottomLabels(labels) {
+    const amount = this.config.mesh.verticalLines;
+    const spaceWidth = this.worldWidth / amount;
+    for (let i = 0; i < labels.length; i++) {
+      const x = this.zero.x + (spaceWidth * i) + 5;
+      this.context.fillText(labels[i], x, this.zero.y + 15);
+    }
+  }
+
+  drawLeftLabels(labels) {
+    const amount = this.config.mesh.horizontalLines;
+    const spaceHeight = this.worldHeight / amount;
+    for (let i = 0; i < labels.length; i++) {
+      const y = this.zero.y - (spaceHeight / 2) - (spaceHeight * i);
+      this.context.fillText(labels[i], this.zero.x - 45, y);
+    }
+  }
+
+  drawLabels(left, bottom) {
+    this.context.fillStyle = this.config.labels.color;  
+    this.context.font = this.config.labels.font;
+    this.drawLeftLabels(left);
+    this.drawBottomLabels(bottom);
   }
 
   initialize() {
