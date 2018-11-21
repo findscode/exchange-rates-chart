@@ -1,30 +1,5 @@
 (function() {
-  const id = "chart";
-  const config = {
-    maxValues: 10,
-    maxLevels: 8,
-    axis: {
-      leftSpace: 60,
-      bottomSpace: 40,
-      rightSpace: 25,
-      lineWidth: 2,
-      color: "#e3e3e3"
-    },
-    mesh: {
-      lineWidth: 1,
-      color: "#cfcfcf"
-    },
-    labels: {
-      color: "#e3e3e3",
-      font: "11px Consolas",
-      bottomOffset: 20,
-      leftOffset: 50
-    },
-    line: {
-      negativeColor: "#FFCC49",
-      positiveColor: "#6ECB68"
-    }
-  };
+  
 
   const data = [
     {"currencyId":145,"date":"2018-11-10T00:00:00","rate":2.1336},
@@ -39,5 +14,5 @@
     {"currencyId":145,"date":"2018-11-19T00:00:00","rate":2.1102},
   ];
 
-  const chartController = new ChartController(id, config, data);
+  new ApplicationService(); 
 })()

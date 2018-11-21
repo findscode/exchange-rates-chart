@@ -6,8 +6,6 @@ class ChartController {
     this.maxRate = this.maxRate();
     this.minRate = this.minRate();
     this.range = this.maxRate - this.minRate;
-    this.chart.drawLabels(this.calculateRateLevels(), this.shownDays());
-    this.render();
   }
 
   calculateRateLevels() {
@@ -47,7 +45,7 @@ class ChartController {
     this.chart.drawLine(start, end);
   }
 
-  render() {
+  drawChart() {
     let currentPoint = {
       x: this.calculatePointX(0),
       y: this.calculatePointY(this.data[0].rate)
@@ -60,5 +58,10 @@ class ChartController {
       this.drawChartLine(currentPoint, endPoint);
       currentPoint = endPoint;
     }
+  }
+
+  render() {
+    this.chart.drawLabels(this.calculateRateLevels(), this.shownDays());
+    this.drawChart();
   }
 }
