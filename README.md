@@ -12,7 +12,8 @@ Itransition JS/TS/React/Redux course, fourth task
 ## Details
 
 * Used [NBRB API](http://www.nbrb.by/APIHelp/ExRates) as a data source;
-* Minimalistic [color palette](https://coolors.co/212424-cfcfcf-e3e3e3-ffcc49-6ecb68) + night mode design = serious business.
+* Minimalistic [color palette](https://coolors.co/212424-cfcfcf-e3e3e3-ffcc49-6ecb68) + night mode design = serious business;
+* Favicon generated using [favicon.io](https://favicon.io/) generator.
 
 <img src='https://coolors.co/export/png/212424-cfcfcf-e3e3e3-ffcc49-6ecb68' />
 
