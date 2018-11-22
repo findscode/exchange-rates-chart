@@ -1,4 +1,6 @@
-class ChartController {
+import ChartComponent from './chartComponent.js';
+
+export default class ChartController {
   constructor(id, config, data) {
     this.chart = new ChartComponent(id, config);
     this.config = config;

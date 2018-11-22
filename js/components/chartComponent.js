@@ -1,4 +1,4 @@
-class ChartComponent {
+export default class ChartComponent {
   constructor(id, config) {
     this.chart = document.getElementById(id);
     this.context = chart.getContext('2d');

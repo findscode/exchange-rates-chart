@@ -1,7 +1,9 @@
-class ExchangeApiClient {
+import Helpers from './helpers.js';
+
+export default class ExchangeApiClient {
   constructor() {
     this.url = {
-      address: "https://www.nbrb.by/API/ExRates/Rates/Dynamics/",
+      address: 'https://www.nbrb.by/API/ExRates/Rates/Dynamics/',
       currency: 145
     };
   }

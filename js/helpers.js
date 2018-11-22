@@ -1,4 +1,4 @@
-class Helpers {
+export default class Helpers {
   static currentDate() {
     const date = new Date();
     return date.toISOString().slice(0, 10);

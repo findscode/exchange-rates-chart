@@ -1,6 +1,10 @@
-class ApplicationService {
+import ExchangeApiClient from '../exchangeApiClient.js';
+import ChartController from '../components/chartController.js';
+import Mappers from '../mappers.js';
+
+export default class ApplicationService {
   constructor() {
-    this.id = "chart";
+    this.id = 'chart';
     this.config = {
       maxValues: 10,
       maxLevels: 8,
@@ -10,29 +14,29 @@ class ApplicationService {
         rightSpace: 25,
         topSpace: 40,
         lineWidth: 2,
-        color: "#e3e3e3"
+        color: '#e3e3e3'
       },
       mesh: {
         lineWidth: 1,
-        color: "#cfcfcf"
+        color: '#cfcfcf'
       },
       labels: {
-        color: "#e3e3e3",
-        font: "11px Consolas",
+        color: '#e3e3e3',
+        font: '11px Consolas',
         bottomOffset: 20,
         leftOffset: 50
       },
       line: {
-        negativeColor: "#FFCC49",
-        positiveColor: "#6ECB68"
+        negativeColor: '#FFCC49',
+        positiveColor: '#6ECB68'
       },
       tops: {
         radius: 4
       },
       tooltip: {
-        color: "#e3e3e3",
+        color: '#e3e3e3',
         fontSize: 11,
-        fontFamily: "Consolas",
+        fontFamily: 'Consolas',
         width: 200,
         offset: 20
       }
