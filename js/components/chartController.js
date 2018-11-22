@@ -6,6 +6,39 @@ class ChartController {
     this.maxRate = this.maxRate();
     this.minRate = this.minRate();
     this.range = this.maxRate - this.minRate;
+    this.tops = [];
+    this.chart.registerMouseMoveEvent(this.onMouseMove.bind(this));
+  }
+
+  generateTooltip(datum) {
+    const date = new Date(Date.parse(datum.date)).toLocaleDateString();
+    return `rate: ${datum.rate} date: ${date}`;
+  }
+
+  onMouseMove(event) {
+    const point = {
+      x: event.offsetX,
+      y: event.offsetY
+    }
+    const topNumber = this.checkIfOnTop(point)
+    if (topNumber) {
+      this.drawTooltip(this.generateTooltip(this.data[topNumber]));
+    } else {
+      this.drawTooltip('');
+    }
+  }
+
+  checkIfOnTop(point) {
+    let topNumber = null;
+    this.tops.forEach((top, index) => {
+      const dx = top.x - point.x;
+      const dy = top.y - point.y;
+      const radius = this.config.tops.radius + 2;
+      if (dx * dx + dy * dy < radius * radius) {
+        topNumber = index;
+      }
+    });
+    return topNumber;
   }
 
   calculateRateLevels() {
@@ -15,7 +48,7 @@ class ChartController {
   }
 
   shownDays() {
-    return this.data.map(datum => new Date(Date.parse(datum.date)).toLocaleDateString());
+    return this.data.map(datum => new Date(Date.parse(datum.date)).toLocaleDateString().slice(0, 5));
   }
 
   maxRate() {
@@ -38,14 +71,25 @@ class ChartController {
     return this.chart.zero.x + (this.chart.spaceWidth * i);
   }
 
-  drawChartLine(start, end) {
-    const currentColor = end.y < start.y ? this.config.line.positiveColor : this.config.line.negativeColor
-    this.chart.changeStrokeColor(currentColor);
-    this.chart.drawTop(end, currentColor);
-    this.chart.drawLine(start, end);
+  drawTops() {
+    let currentPoint = {
+      x: this.calculatePointX(0),
+      y: this.calculatePointY(this.data[0].rate)
+    };
+    this.tops.push(currentPoint);
+    for (let i = 1; i < this.data.length; i++) {
+      const endPoint = {
+        x: this.calculatePointX(i),
+        y: this.calculatePointY(this.data[i].rate)
+      };
+      this.tops.push(endPoint);
+      const currentColor = endPoint.y < currentPoint.y ? this.config.line.positiveColor : this.config.line.negativeColor;
+      this.chart.drawTop(endPoint, currentColor);
+      currentPoint = endPoint;
+    }
   }
 
-  drawChart() {
+  drawChartLine() {
     let currentPoint = {
       x: this.calculatePointX(0),
       y: this.calculatePointY(this.data[0].rate)
@@ -55,13 +99,23 @@ class ChartController {
         x: this.calculatePointX(i),
         y: this.calculatePointY(this.data[i].rate)
       };
-      this.drawChartLine(currentPoint, endPoint);
+      const currentColor = endPoint.y < currentPoint.y ? this.config.line.positiveColor : this.config.line.negativeColor;
+      this.chart.changeStrokeColor(currentColor);
+      this.chart.drawLine(currentPoint, endPoint);
       currentPoint = endPoint;
     }
   }
 
+  drawTooltip(tooltip) {
+    this.chart.drawText({
+      x: this.chart.windowWidth - this.config.tooltip.width,
+      y: this.config.tooltip.offset
+    }, tooltip);
+  }
+
   render() {
     this.chart.drawLabels(this.calculateRateLevels(), this.shownDays());
-    this.drawChart();
+    this.drawChartLine();
+    this.drawTops();
   }
 }

@@ -8,6 +8,7 @@ class ApplicationService {
         leftSpace: 60,
         bottomSpace: 40,
         rightSpace: 25,
+        topSpace: 40,
         lineWidth: 2,
         color: "#e3e3e3"
       },
@@ -24,6 +25,16 @@ class ApplicationService {
       line: {
         negativeColor: "#FFCC49",
         positiveColor: "#6ECB68"
+      },
+      tops: {
+        radius: 4
+      },
+      tooltip: {
+        color: "#e3e3e3",
+        fontSize: 11,
+        fontFamily: "Consolas",
+        width: 200,
+        offset: 20
       }
     };
 

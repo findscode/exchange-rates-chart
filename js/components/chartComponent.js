@@ -10,8 +10,12 @@ class ChartComponent {
       y: this.windowHeight - this.config.axis.bottomSpace
     }
     this.worldWidth = this.windowWidth - this.zero.x;
-    this.worldHeight = this.zero.y;
+    this.worldHeight = this.zero.y - this.config.axis.topSpace;
     this.initialize();
+  }
+
+  registerMouseMoveEvent(onMouseMove) {
+    this.chart.addEventListener('mousemove', onMouseMove);
   }
 
   resizeChartToDisplaySize() {
@@ -32,7 +36,8 @@ class ChartComponent {
   }
 
   drawTop(point, color) {
-    this.context.arc(point.x, point.y, this.config.mesh.lineWidth * 3, 0, 2 * Math.PI, false);
+    this.context.beginPath();
+    this.context.arc(point.x, point.y, this.config.tops.radius, 0, 2 * Math.PI, false);
     this.context.fillStyle = color;
     this.context.fill();
     this.context.closePath();
@@ -43,7 +48,7 @@ class ChartComponent {
     this.changeLineWidth(this.config.axis.lineWidth);
     this.drawLine(this.zero, {
       x: this.zero.x,
-      y: 0
+      y: this.config.axis.topSpace
     });
     this.drawLine(this.zero, {
       x: this.windowWidth - this.config.axis.rightSpace,
@@ -61,7 +66,7 @@ class ChartComponent {
         y: this.zero.y
       }, {
         x,
-        y: 0
+        y: this.config.axis.topSpace
       });
     }
   }
@@ -92,7 +97,7 @@ class ChartComponent {
     const amount = this.config.maxValues;
     const spaceWidth = this.worldWidth / amount;
     for (let i = 0; i < labels.length; i++) {
-      const x = this.zero.x + (spaceWidth * i) - 25;
+      const x = this.zero.x + (spaceWidth * i) - 15;
       this.context.fillText(labels[i], x, this.zero.y + this.config.labels.bottomOffset);
     }
   }
@@ -119,6 +124,22 @@ class ChartComponent {
 
   changeLineWidth(width) {
     this.context.lineWidth = width;
+  }
+
+  clearText(point) {
+    this.context.clearRect(
+      point.x, 
+      point.y - this.config.tooltip.fontSize, 
+      this.config.tooltip.width, 
+      this.config.tooltip.fontSize
+      );
+  }
+
+  drawText(point, text) {
+    this.clearText(point);
+    this.context.fillStyle = this.config.tooltip.color;  
+    this.context.font = `${this.config.tooltip.fontSize}px ${this.config.tooltip.fontFamily}`;
+    this.context.fillText(text, point.x, point.y);
   }
 
   initialize() {
